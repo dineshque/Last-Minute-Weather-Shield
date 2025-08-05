@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weather Shield Demo</title>
+</head>
+<body>
+    <h1>Weather Shield Hackathon Demo</h1>
+    <form method="get" action="/demo">
+        <label for="city">Enter city:</label>
+        <input type="text" name="city" id="city" required>
+        <button type="submit">Get Alert</button>
+    </form>
+
+    {% if advice_hi %}
+        <h3>Advice (Hindi):</h3>
+        <p>{{ advice_hi }}</p>
+        <audio controls>
+          <source src="{{ url_for('get_voice', message=advice_hi, lang='hi') }}" type="audio/mpeg">
+          Your browser does not support the audio element.
+        </audio>
+    {% endif %}
+
+    {% if error %}
+        <p style="color:red">{{ error }}</p>
+    {% endif %}
+</body>
+</html>

@@ -47,6 +47,26 @@ def detect_risks(weather_json):
 
     return risks
 
+from gtts import gTTS
+from flask import send_file
+import io
+
+@app.route('/voice_alert', methods=['POST'])
+def voice_alert():
+    data = request.get_json()
+    advice = data.get('message')
+    lang = data.get('lang', 'hi')  # 'hi' for Hindi, 'en' for English
+
+    if not advice or not isinstance(advice, str):
+        return jsonify({'error': 'Message is required'}), 400
+
+    # Generate voice bytes using gTTS
+    tts = gTTS(text=advice, lang=lang)
+    mp3_fp = io.BytesIO()
+    tts.write_to_fp(mp3_fp)
+    mp3_fp.seek(0)
+    return send_file(mp3_fp, mimetype='audio/mpeg')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
